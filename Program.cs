@@ -11,9 +11,13 @@ account1.ShowAccountInformation();
 account2.ShowAccountInformation();
 account3.ShowAccountInformation();
 
+Console.WriteLine();
+Console.WriteLine("Transfering 20 from account2 to account1");
 account2.Transfer(20, account1);
+Console.WriteLine("Transfering 100 from account3 to account1");
 account3.Transfer(100, account1);
 
+Console.WriteLine();
 account1.ShowBalance();
 account2.ShowBalance();
 account3.ShowBalance();
