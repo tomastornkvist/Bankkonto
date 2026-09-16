@@ -1,38 +1,46 @@
 
-enum AccountTypes { TransactionAccount, SavingsAccount, DebitAccount, creditAccount }
+enum AccountTypes { TransactionAccount, SavingsAccount, CreditAccount }
 class Account(string mainHolder, string accountNumber, AccountTypes accountType)
 {
     string AccountNumber = accountNumber;
     string MainHolder = mainHolder;
     List<String> AdditionalHolders = new();
     AccountTypes AccountType = accountType;
-    int Balance = 0;
-    double InterestRate = 0;
+    double Balance = 0;
+    private double interestRate = 0;
+    public double InterestRate
+    {
+        get { return interestRate; }
+        set
+        {
+            if (AccountType == AccountTypes.SavingsAccount)
+                interestRate = value;
+        }
+    }
 
-    private int creditLimit = 0;
-    public int CreditLimit
+    private double creditLimit = 0;
+    public double CreditLimit
     {
         get { return creditLimit; }
         set
         {
             switch (AccountType)
             {
-                case AccountTypes.DebitAccount:
-                case AccountTypes.creditAccount:
+                case AccountTypes.CreditAccount:
                     creditLimit = value;
                     break;
             }
         }
     }
     bool Locked = false;
-    int TransferLimit = 0;
-    int AccountFee = 0;
+    double TransferLimit = 0;
+    double AccountFee = 0;
 
-    public void Deposit(int amount)
+    public void Deposit(double amount)
     {
         Balance += amount;
     }
-    public bool WithDraw(int amount)
+    public bool WithDraw(double amount)
     {
         switch (AccountType)
         {
@@ -42,8 +50,7 @@ class Account(string mainHolder, string accountNumber, AccountTypes accountType)
                     return false;
                 break;
 
-            case AccountTypes.DebitAccount:
-            case AccountTypes.creditAccount:
+            case AccountTypes.CreditAccount:
                 if (amount > Balance + creditLimit)
                     return false;
                 break;
@@ -73,7 +80,7 @@ class Account(string mainHolder, string accountNumber, AccountTypes accountType)
             Console.WriteLine($"Account fee: {this.AccountFee}");
     }
 
-    public bool Transfer(int amount, Account recipient)
+    public bool Transfer(double amount, Account recipient)
     {
         switch (AccountType)
         {
@@ -82,8 +89,8 @@ class Account(string mainHolder, string accountNumber, AccountTypes accountType)
                 if (amount > Balance)
                     return false;
                 break;
-            case AccountTypes.DebitAccount:
-            case AccountTypes.creditAccount:
+
+            case AccountTypes.CreditAccount:
                 if (amount > Balance + creditLimit)
                     return false;
                 break;
